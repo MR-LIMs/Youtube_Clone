@@ -1,0 +1,15 @@
+* express.js : nodejs 서버 프레임워크
+* npm : node package manager, javascript와 관련된 모든 것을 관리.
+
+0. npm 사용 시 주의사항
+   - 패키지를 형성한 항상 폴더를 잘 확인하기
+
+1. 패키지 생성하기
+   - $ npm init
+   - package.json 확인하기
+
+2. express 설치하기
+
+* 협업 시, node_modules와 package-lock.json이 없더라도 
+  package.json의 dependencies를 보고, $ npm install 을
+  사용시 자동으로 설치된다.
