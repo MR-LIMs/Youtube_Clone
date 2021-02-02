@@ -1,0 +1,105 @@
+* express.js : nodejs 서버 프레임워크
+* npm : node package manager, javascript와 관련된 모든 것을 관리.
+
+* 협업 시, node_modules와 package-lock.json이 없더라도 
+  package.json의 dependencies를 보고, $ npm install 을
+  사용시 자동으로 설치된다.
+
+* 내장 함수 위치 찾는 방법??
+* go to definition 보는법??
+* req는 어디서 받아오는거냐? client가 server로 요청?
+
+* middleware
+  보통 req와 res 사이에 중간 과정이 있다.
+  모든 함수는 middleware로 사용 가능하다.
+  next()가 필요하다.
+  
+  - app.get('/', middleware, function)
+  - app.use(middleware) : 모든 웹사이트에서 동작한다. 순서가 중요하다.
+
+0. npm 사용 시 주의사항
+   - 패키지를 형성한 항상 폴더를 잘 확인하기
+
+1. 패키지 생성하기
+   - $ npm init
+   - package.json 확인하기
+
+2. express 설치하기
+
+3. github와 연결하기 (with gitignore)
+
+4. README.md : github에서 설명서 같은 역할
+
+// respond with "hello world" when a GET request is made to the homepage
+// app.get('/', function(req, res) {
+// })
+
+5. 코드 작성
+   const express = require('express');  // 패키지에서 express를 찾고 node_modules로 넘어가 찾는다.
+   const app = express();
+
+   const PORT = 4000;
+
+   const handleListening = () => {
+     console.log(`Listening on: http://localhost:${PORT}`);
+   }
+
+   app.listen(PORT, handleListening);
+
+6. 서버 실행
+   $ node youtube_clone/index.js 
+   => localhost:4000 => cannot GET / => root(/)에 아무것도 없다.
+
+7. package.json 코드 작성
+   "scripts": {
+     "start" : "node index.js"
+   } => $ npm start
+
+8. babel 설치 : es6 -> 구버전 코드로
+
+9. nodemon 설치 : 서버를 킨 채로 변경사항 저장
+   // 필요시 --delay 2 추가
+
+10. morgan 설치 : log 기록을 남긴다.
+    // log : 웹 사이트에 방문한 사용자가 
+    언제, 어디서, 어떤 페이지를 방문했는지에 대해 기록한 파일
+
+11. helmet 설치 : 보안을 위한 것
+
+12. body-parser(4.16.0부터 생략 가능), cookie-parser 설치
+
+* export 사용시
+  - named : import할 떄, export한 개체명을 그대로 써줘야 한다.
+  - default : import할 때, export한 개체명을 바꿔서 사용해도 된다. 
+
+===============================================================
+
+* 요약
+1. express(함수)를 import한다.
+import express from "express";  
+// import express만으로밖에 받아올 수 없다.
+
+2. express를 app에 담는다.
+const app = express();
+
+  - server listen하기
+  app.listen(PORT, function)
+
+  - req, res 요청받고 응답하기.
+  app.get("route", (req, res) => {res.send(command)})
+
+  - middleware 전역으로 수행
+  app.use(function)
+
+  - router link하기 
+  app.use("/", router)  // 특정 경로 요청시 라우터를 사용하라 
+
+3. 역할별로 파일 분리하기
+   init.js(server listen) :  server listen
+ / app.js(controller) : middleware, router link
+ / router.js(Router) : router create
+
+4. routes.js
+   주소 체인을 상수로 선언해 사용한다.
+
+5. controller를 분리해준다.
