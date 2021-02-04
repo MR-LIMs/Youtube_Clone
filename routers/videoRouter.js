@@ -1,13 +1,14 @@
 import express from "express";
+import { deleteVideo, editVideo, upload, videoDetail, videos } from "../controllers/videoController";
 import routes from "../routes";
 
 const videoRouter = express.Router();
 
-videoRouter.get(routes.videos, (req, res) => res.send('video index'));
-videoRouter.get(routes.upload, (req, res) => res.send('video edit'));
-videoRouter.get(routes.videoDetail, (req, res) => res.send('video password'));
-videoRouter.get(routes.editVideo, (req, res) => res.send('video password'));
-videoRouter.get(routes.deleteVideo, (req, res) => res.send('video password'));
+videoRouter.get(routes.videos, videos);
+videoRouter.get(routes.upload, upload);
+videoRouter.get(routes.videoDetail, videoDetail);
+videoRouter.get(routes.editVideo, editVideo);
+videoRouter.get(routes.deleteVideo, deleteVideo);
 
 export default videoRouter; 
 // 이 파일엔 videoRouter 하나의 개체만 있으므로, default 사용

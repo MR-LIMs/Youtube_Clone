@@ -1,0 +1,43 @@
+* app.set(name, value) => app.set("view engine", "pug")
+  - view engine 설정을 pug로 바꾼다.
+
+* pug : 템플릿 언어, express의 view engine
+  1) 들여쓰기 필수
+  2) 닫는 태그가 필요없다
+  3) block content : 외부 html을 불러오는 기능.
+  4) extends layouts/main.pug
+  5) include ../partials/header
+
+
+* pug 연결하기
+  export const join = (req, res) => res.render("pug파일명");
+  <-> export const join = (req, res) => res.send("join");
+      => 웹페이지에 join을 적는다.
+
+* new Date() : 날짜 관련 함수
+  new Date().getFullYear()
+
+* res.locals.siteName
+  => local 변수를 global 변수로 사용하도록 만들어주는 것.
+  => siteName이란 변수를 global하게 사용할 수 있다.
+
+* export const home = (req, res) => res.render("home", {pageTitle: "Home"})
+  - {pageTitle: "Home"} 객체를 "home" 템플릿에 전달한다.
+  - pageTitle 변수를 "home" 템플릿에 전달한다.
+
+* BEM
+  Block(블럭) __ Element(요소) -- Modifier(속성)
+
+* input name="" 
+  - input 양식 컨트롤의 이름. 
+	- 이름/값, 짝(name/value pair)의 일부로서 양식과 함께 전송된다. 
+  
+* input value="" 
+  - 양식 컨트롤의 현재 값. 
+  - 이름/값, 짝(name/value pair)의 일부로서 양식과 함께 전송된다. 
+
+
+1. layouts 폴더 내에 main.pug 생성
+2. partials는 페이지의 일부분으로 partials 폴더 내에 
+   - footer.pug 생성
+   - header.pug 생성
