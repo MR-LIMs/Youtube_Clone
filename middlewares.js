@@ -1,11 +1,31 @@
-import routes from "./routes";
+import routes from './routes';
+import multer from 'multer';
+
+const multerVideo = multer({ dest: 'uploads/videos/' }); // destination : server에 있는 videos폴더
 
 export const localsMiddleware = (req, res, next) => {
-  res.locals.siteName = "WeTube";
+  res.locals.siteName = 'WeTube';
   res.locals.routes = routes;
-  res.locals.user = {
-    isAuthenticated: true,
-    id: 1
-  };
+  res.locals.user = req.user || null;
   next();
 };
+
+export const onlyPublic = (req, res, next) => {
+  if (req.user) {
+    console.log(req.user);
+    res.redirect(routes.home);
+  } else {
+    next();
+  }
+};
+
+export const onlyPrivate = (req, res, next) => {
+  if (req.user) {
+    console.log(req.user);
+    next();
+  } else {
+    res.redirect(routes.home);
+  }
+};
+
+export const uploadVideo = multerVideo.single('videoFile');

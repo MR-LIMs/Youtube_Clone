@@ -1,0 +1,41 @@
+.form-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  form {
+    width: 100%;
+    max-width: 320px;
+    margin-bottom: 50px;
+    input:not([type='file']),
+    .fileUpload {
+      display: block;
+      padding: 10px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+      &:not(:last-child) {
+        margin-bottom: 25px;
+      }
+    }
+    input[type='submit'] {
+      background-color: #00cec9;
+      color: white;
+    }
+    input[type='file'] {
+      box-shadow: none;
+    }
+    textarea {
+      margin-bottom: 25px;
+    }
+  }
+  // 이해가 안간다 컸는데 작아지고
+  a {
+    max-width: 320px;
+    width: 100%;
+  }
+  .fileUpload {
+    label {
+      font-weight: 700;
+      margin-right: 8px;
+    }
+  }
+}

@@ -1,0 +1,39 @@
+.video-detail__container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  .video__info {
+    width: 100%;
+    max-width: 850px;
+    margin-top: 25px;
+  }
+  // 이해가 안간다 작았는데 커지고
+  button {
+    float: right;
+    width: 100px;
+    margin-bottom: 25px;
+  }
+  .video__title,
+  .video__views,
+  .video__description {
+    margin-bottom: 20px;
+    display: block;
+  }
+  .video__title {
+    font-size: 25px;
+    font-weight: 600;
+  }
+  .video__views {
+    font-size: 13px;
+  }
+  .video__description {
+    font-size: 18px;
+    font-weight: 400;
+  }
+  .video__comments {
+    margin-top: 25px;
+    .video__comment-number {
+      font-size: 18px;
+    }
+  }
+}
