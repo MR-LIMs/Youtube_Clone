@@ -8,7 +8,7 @@ import passport from 'passport';
 import mongoose from 'mongoose';
 import session from 'express-session';
 import connectMongo from 'connect-mongo';
-
+import bodyParser from 'body-parser';
 import { localsMiddleware } from './middlewares';
 
 import routes from './routes';
@@ -22,20 +22,24 @@ const app = express();
 
 const CookieStore = connectMongo(session);
 
-app.use(helmet());
+app.use(
+  helmet({
+    contentSecurityPolicy: false,
+  }),
+);
 app.use((req, res, next) => {
   res.setHeader('Content-Security-Policy', "script-src 'self' https://archive.org");
   next();
 });
+
 app.set('view engine', 'pug');
 app.use('/uploads', express.static('uploads'));
 app.use('/static', express.static('static'));
-
 app.use(cookieParser());
-// app.use(bodyParser.json());
-// app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+// app.use(express.json());
+// app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev'));
 app.use(
   session({

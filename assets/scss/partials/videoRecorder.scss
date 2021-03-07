@@ -1,0 +1,16 @@
+.record-container {
+  width: 100%;
+  max-width: 320px;
+  margin-bottom: 50px;
+  video {
+    background-color: $black;
+    width: 100%;
+    margin-bottom: 20px;
+    // transform: rotateY(180deg);
+    // -webkit-transform: rotateY(180deg);
+  }
+  button {
+    color: white;
+    background-color: #ff7675;
+  }
+}

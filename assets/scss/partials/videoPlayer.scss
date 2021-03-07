@@ -1,0 +1,96 @@
+.videoPlayer {
+  width: 850px;
+  height: 547px;
+  position: relative;
+  &:hover {
+    .videoPlayer__controls {
+      opacity: 1;
+      i {
+        font-size: 16px;
+        cursor: pointer;
+      }
+    }
+  }
+  video {
+    width: 100%;
+    max-width: 100%;
+  }
+  .videoPlayer__controls {
+    opacity: 0;
+    transition: opacity 0.4s linear;
+    position: relative;
+    z-index: 10;
+    color: white;
+    font-size: 16px;
+    font-weight: 500;
+    bottom: 40px;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 10px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    .videoPlayer__column:first-child {
+      // display: flex;
+      // align-items: center;
+      span:first-child {
+        margin-right: 10px;
+      }
+      span:nth-child(2) {
+        position: relative;
+      }
+      span:nth-child(2):hover {
+        i {
+          padding-right: 10px;
+        }
+        .volume-bar {
+          display: inline;
+          opacity: 1;
+        }
+      }
+    }
+    .videoPlayer__column:last-child {
+      justify-self: end;
+    }
+    .videoPlayer__column:nth-child(2) {
+      justify-self: center;
+    }
+    .volume-bar {
+      display: none;
+      position: absolute;
+      padding: 0;
+      opacity: 0;
+      transition: opacity 0.4s linear;
+      width: 80px;
+      height: 6px;
+      left: 23px;
+      top: 6px;
+      // 기본 스타일 초기화코드
+      // width: 100%; /* Firefox에서는 특정한 넓이가 필요*/
+      background-color: transparent; /* Chrome에서 투명하게 출력 */
+      -webkit-appearance: none; /* 기본슬라이드 숨기기*/
+      &:focus {
+        outline: none;
+      }
+      &::-webkit-slider-thumb {
+        -webkit-appearance: none; /* 기본슬라이드 숨기기*/
+        background-color: $red;
+        height: 13px;
+        width: 13px;
+        border-radius: 50%;
+        position: relative;
+        top: -3.6px;
+      }
+      &::-webkit-slider-runnable-track {
+        position: relative;
+        width: 100%;
+        height: 5px;
+        border-radius: 3px;
+        background-color: $grey;
+      }
+    }
+  }
+}
+
+// 볼륨버튼 양쪽 끝까지 안당겨진다 => padding:0
+// 볼륨 아이콘 말고 빈공간 눌렀을 때도 볼륨바가 나타난다.
+// 볼륨바 위에 transparent 그림자?
+// 볼륨버튼 바뀔때 천천히 바뀌는 효과

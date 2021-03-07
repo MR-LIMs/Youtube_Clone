@@ -10,32 +10,263 @@
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _scss_styles_scss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../scss/styles.scss */ "./assets/scss/styles.scss");
+/* harmony import */ var _videoPlayer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./videoPlayer */ "./assets/js/videoPlayer.js");
+/* harmony import */ var _videoPlayer__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_videoPlayer__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _videoRecorder__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./videoRecorder */ "./assets/js/videoRecorder.js");
+/* harmony import */ var _videoRecorder__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_videoRecorder__WEBPACK_IMPORTED_MODULE_2__);
+
+
+
+
+/***/ }),
+
+/***/ "./assets/js/videoPlayer.js":
+/*!**********************************!*\
+  !*** ./assets/js/videoPlayer.js ***!
+  \**********************************/
+/***/ (() => {
+
+var videoContainer = document.getElementById('jsVideoPlayer');
+var videoPlayer = document.querySelector('#jsVideoPlayer video');
+var playBtn = document.getElementById('jsPlayButton');
+var volumeBtn = document.getElementById('jsVolumeButton');
+var fullScrnBtn = document.getElementById('jsFullScreen');
+var currentTime = document.getElementById('currentTime');
+var totalTime = document.getElementById('totalTime');
+var volumeBar = document.querySelector('.volume-bar');
+
+function handlePlayClick() {
+  if (videoPlayer.played) {
+    videoPlayer.pause();
+    playBtn.innerHTML = "<i class='fas fa-play'></i>";
+  } else {
+    videoPlayer.play();
+    playBtn.innerHTML = "<i class='fas fa-pause'></i>";
+  }
+}
+
+function handleEnded() {
+  playBtn.innerHTML = "<i class='fas fa-reply-all'></i>";
+}
+
+function handleVolumeClick() {
+  if (videoPlayer.muted === true) {
+    videoPlayer.muted = false;
+
+    if (videoPlayer.volume < 0.5 && volumeBtn.firstElementChild.className !== 'fas fa-volume-down') {
+      volumeBtn.firstElementChild.className = 'fas fa-volume-down';
+    } else if (videoPlayer.volume >= 0.5 && volumeBtn.firstElementChild.className !== 'fas fa-volume-up') {
+      volumeBtn.firstElementChild.className = 'fas fa-volume-up';
+    }
+
+    volumeBar.value = videoPlayer.volume;
+    console.log('not mute');
+  } else {
+    videoPlayer.muted = true;
+    volumeBtn.firstElementChild.className = 'fas fa-volume-mute';
+    volumeBar.value = 0;
+    console.log('mute');
+  }
+}
+
+function exitFullScreen() {
+  document.exitFullscreen();
+  fullScrnBtn.innerHTML = "<i class='fas fa-expand'></i>";
+  fullScrnBtn.removeEventListener('click', exitFullScreen);
+  fullScrnBtn.addEventListener('click', goFullScreen);
+}
+
+function goFullScreen() {
+  // prefix : moz, webkit, ie, ms ...
+  videoContainer.requestFullscreen();
+  fullScrnBtn.innerHTML = "<i class='fas fa-compress'></i>";
+  fullScrnBtn.removeEventListener('click', goFullScreen);
+  fullScrnBtn.addEventListener('click', exitFullScreen);
+}
+
+var formatDate = function formatDate(seconds) {
+  var secondsNumber = parseInt(seconds, 10);
+  var hours = Math.floor(secondsNumber / 3600);
+  var minutes = Math.floor((secondsNumber - hours * 3600) / 60);
+  var totalSeconds = Math.floor(secondsNumber - hours * 3600 - minutes * 60);
+
+  if (hours < 10) {
+    hours = "0".concat(hours);
+  }
+
+  if (minutes < 10) {
+    minutes = "0".concat(minutes);
+  }
+
+  if (totalSeconds < 10) {
+    totalSeconds = "0".concat(totalSeconds);
+  }
+
+  return "".concat(hours, ":").concat(minutes, ":").concat(totalSeconds);
+};
+
+function getCurrentTime() {
+  var currentTimeString = formatDate(videoPlayer.currentTime);
+  currentTime.innerHTML = currentTimeString;
+}
+
+function setCurrentTime() {
+  var interval = setInterval(getCurrentTime, 1000);
+
+  if (videoPlayer.currentTime === videoPlayer.duration) {
+    clearInterval(interval);
+  }
+}
+
+function setTotalTime() {
+  var totalTimeString = formatDate(videoPlayer.duration);
+  totalTime.innerHTML = totalTimeString;
+  videoPlayer.addEventListener('play', setCurrentTime);
+}
+
+function handleDrag(event) {
+  var value = event.target.value; // const value = event.target.value
+
+  videoPlayer.volume = value;
+
+  if (videoPlayer.volume < 0.5 && volumeBtn.firstElementChild.className !== 'fas fa-volume-down') {
+    // const volumeIcon = document.createElement('i'); => 생성
+    // volumeIcon.className = 'fas fa-volume-down'; => 속성 설정
+    // volumeBtn.replaceChild(volumeIcon, volumeBtn.firstElementChild); => 노드 찾아 바꾸기
+    // volumeBtn.firstElementChild.addEventListener('click', handleVolumeClick);
+    volumeBtn.firstElementChild.className = 'fas fa-volume-down';
+  } else if (videoPlayer.volume >= 0.5 && volumeBtn.firstElementChild.className !== 'fas fa-volume-up') {
+    volumeBtn.firstElementChild.className = 'fas fa-volume-up';
+  }
+}
+
+function init() {
+  playBtn.addEventListener('click', handlePlayClick);
+  videoPlayer.addEventListener('click', handlePlayClick);
+  videoPlayer.addEventListener('ended', handleEnded);
+  volumeBtn.firstElementChild.addEventListener('click', handleVolumeClick);
+  fullScrnBtn.addEventListener('click', goFullScreen);
+  videoPlayer.addEventListener('loadedmetadata', setTotalTime);
+  volumeBar.addEventListener('input', handleDrag);
+}
+
+if (videoContainer) {
+  init();
+} // 공부를 할 때나 코드 변경을 할 때,
+// 무엇을 할지에 대해 정확히 되새기고,
+// 어떻게 하면 좋을지 먼저 계획을 세우고,
+// 변경사항을 다시 한번 되새긴다.
+
+/***/ }),
+
+/***/ "./assets/js/videoRecorder.js":
+/*!************************************!*\
+  !*** ./assets/js/videoRecorder.js ***!
+  \************************************/
+/***/ (() => {
+
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
+var recorderContainer = document.getElementById('jsRecordContainer');
+var recordBtn = document.getElementById('jsRecordBtn');
+var videoPreview = document.getElementById('jsVideoPreview');
+var videoRecorder;
+var streamObject;
 
+var handleVideoData = function handleVideoData(event) {
+  console.log(event.data); // blob은 0,1로 이뤄진 파일.
 
-var something = /*#__PURE__*/function () {
+  var videoFile = event.data; // download link 생성
+  // 일반적으로 download는 link를 클릭했을 때, 파일을 받는 것.
+
+  var link = document.createElement('a');
+  link.href = URL.createObjectURL(videoFile);
+  link.download = 'recorded.webm';
+  document.body.appendChild(link);
+  link.click(); // fake click
+};
+
+var stopRecording = function stopRecording() {
+  videoRecorder.stop();
+  recordBtn.removeEventListener('click', stopRecording);
+  recordBtn.addEventListener('click', getVideo);
+  recordBtn.innerHTML = 'Start Recording'; // videoPreview.srcObject = null;
+};
+
+var startRecording = function startRecording() {
+  videoRecorder = new MediaRecorder(streamObject);
+  videoRecorder.start(); // videoRecorder.start(1000); 1초 단위로 끊어진 blob => array에 추가해 저장해야 한다.
+
+  console.log(videoRecorder);
+  videoRecorder.addEventListener('dataavailable', handleVideoData); // setTimeOut(() => videoRecorder.stop(), 5000);
+  // recording이 stop 돼야 data를 획득할 수 있다.
+
+  recordBtn.addEventListener('click', stopRecording);
+};
+
+var getVideo = /*#__PURE__*/function () {
   var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
     return regeneratorRuntime.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
-            console.log('something');
+            _context.prev = 0;
+            _context.next = 3;
+            return navigator.mediaDevices.getUserMedia({
+              audio: true,
+              video: {
+                facingMode: 'user',
+                mirrored: true,
+                width: 1280,
+                height: 720
+              } // true
 
-          case 1:
+            });
+
+          case 3:
+            streamObject = _context.sent;
+            // videoPreview.srcObject = stream;
+            videoPreview.srcObject = streamObject;
+            videoPreview.muted = true;
+            videoPreview.play();
+            recordBtn.innerHTML = 'Stop Recording'; // streamObject = stream;
+
+            startRecording();
+            _context.next = 14;
+            break;
+
+          case 11:
+            _context.prev = 11;
+            _context.t0 = _context["catch"](0);
+            recordBtn.innerHTML = "😕 You can't Record";
+
+          case 14:
+            _context.prev = 14;
+            recordBtn.removeEventListener('click', getVideo);
+            return _context.finish(14);
+
+          case 17:
           case "end":
             return _context.stop();
         }
       }
-    }, _callee);
+    }, _callee, null, [[0, 11, 14, 17]]);
   }));
 
-  return function something() {
+  return function getVideo() {
     return _ref.apply(this, arguments);
   };
 }();
+
+function init() {
+  recordBtn.addEventListener('click', getVideo);
+}
+
+if (recorderContainer) {
+  init();
+} // 비디오 좌우반전하기!!!!!!
 
 /***/ }),
 
@@ -11148,6 +11379,35 @@ __webpack_require__.r(__webpack_exports__);
 /******/ 	}
 /******/ 	
 /************************************************************************/
+/******/ 	/* webpack/runtime/compat get default export */
+/******/ 	(() => {
+/******/ 		// getDefaultExport function for compatibility with non-harmony modules
+/******/ 		__webpack_require__.n = (module) => {
+/******/ 			var getter = module && module.__esModule ?
+/******/ 				() => (module['default']) :
+/******/ 				() => (module);
+/******/ 			__webpack_require__.d(getter, { a: getter });
+/******/ 			return getter;
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	(() => {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__webpack_require__.d = (exports, definition) => {
+/******/ 			for(var key in definition) {
+/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	(() => {
+/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ 	})();
+/******/ 	
 /******/ 	/* webpack/runtime/make namespace object */
 /******/ 	(() => {
 /******/ 		// define __esModule on exports

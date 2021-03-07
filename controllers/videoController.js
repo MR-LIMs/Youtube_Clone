@@ -1,5 +1,6 @@
 import routes from '../routes';
 import Video from '../models/Video';
+import User from '../models/User';
 
 export const home = async (req, res) => {
   // catch가 없으면 에러가 났을 때, JS는 아무 동작을 해주지 않는다.
@@ -40,10 +41,11 @@ export const postUpload = async (req, res) => {
     fileUrl: path,
     title,
     description,
+    creator: req.user._id,
   });
-  // body: { file, title, description}
-  // To Do: Upload and save video
-  // res.render("upload");
+  const user = await User.findById(req.user._id);
+  user.videos.push(newVideo.id);
+  await user.save();
   res.redirect(routes.videoDetail(newVideo.id));
 };
 
@@ -53,10 +55,11 @@ export const videoDetail = async (req, res) => {
     params: { id },
   } = req;
   try {
-    const video = await Video.findById(id);
-    // console.log(video);
+    const video = await Video.findById(id).populate('creator');
+    // console.log(typeof video.creator.id);
     res.render('videoDetail', { pageTitle: video.title, video });
   } catch (error) {
+    console.log(error);
     // console.log(error)
     res.redirect(routes.home);
   }
@@ -68,11 +71,17 @@ export const getEditVideo = async (req, res) => {
   } = req;
   try {
     const video = await Video.findById(id);
-    res.render('editVideo', { pageTitle: `Edit ${video.title}`, video });
+    // console.log(typeof (video.creator, req.user._id));
+    if (String(video.creator) !== req.user._id) {
+      throw Error();
+    } else {
+      res.render('editVideo', { pageTitle: `Edit ${video.title}`, video });
+    }
   } catch (error) {
     res.redirect(routes.home);
   }
 };
+
 export const postEditVideo = async (req, res) => {
   const {
     params: { id },
@@ -92,7 +101,13 @@ export const deleteVideo = async (req, res) => {
     params: { id },
   } = req;
   try {
-    await Video.findOneAndRemove({ _id: id });
+    const video = await Video.findById(id);
+    // console.log(typeof (video.creator, req.user._id));
+    if (String(video.creator) !== req.user._id) {
+      throw Error();
+    } else {
+      await Video.findOneAndRemove({ _id: id });
+    }
   } catch (error) {}
   res.redirect(routes.home);
 };

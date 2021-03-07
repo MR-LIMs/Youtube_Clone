@@ -3,6 +3,7 @@
 Cloning Youtube with Vanilla and NodeJS
 
 ## pages:
+
 - [ ] Home
 - [x] Join
 - [x] Login
@@ -10,6 +11,6 @@ Cloning Youtube with Vanilla and NodeJS
 - [ ] User Detail
 - [ ] Edit Profile
 - [ ] Change Password
-- [ ] Upload 
+- [ ] Upload
 - [ ] Video Detail
 - [ ] Edit Video
