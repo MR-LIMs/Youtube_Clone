@@ -12,6 +12,7 @@ import bodyParser from 'body-parser';
 import { localsMiddleware } from './middlewares';
 
 import routes from './routes';
+import apiRouter from './routers/apiRouter';
 import userRouter from './routers/userRouter';
 import videoRouter from './routers/videoRouter';
 import globalRouter from './routers/globalRouter';
@@ -54,6 +55,7 @@ app.use(passport.session());
 
 app.use(localsMiddleware);
 
+app.use(routes.api, apiRouter);
 app.use(routes.home, globalRouter);
 app.use(routes.users, userRouter); // user로 접속하면 userRouter를 모두 사용하겠다.
 app.use(routes.videos, videoRouter);

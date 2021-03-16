@@ -8,17 +8,25 @@ const totalTime = document.getElementById('totalTime');
 
 const volumeBar = document.querySelector('.volume-bar');
 
+const registerView = () => {
+  const videoId = window.location.href.split('/videos/')[1];
+  fetch(`/api/${videoId}/view`, {
+    method: 'POST',
+  });
+};
+
 function handlePlayClick() {
-  if (videoPlayer.played) {
-    videoPlayer.pause();
-    playBtn.innerHTML = "<i class='fas fa-play'></i>";
-  } else {
+  if (videoPlayer.paused) {
     videoPlayer.play();
     playBtn.innerHTML = "<i class='fas fa-pause'></i>";
+  } else {
+    videoPlayer.pause();
+    playBtn.innerHTML = "<i class='fas fa-play'></i>";
   }
 }
 
 function handleEnded() {
+  registerView();
   playBtn.innerHTML = "<i class='fas fa-reply-all'></i>";
 }
 
@@ -127,3 +135,6 @@ if (videoContainer) {
 // 무엇을 할지에 대해 정확히 되새기고,
 // 어떻게 하면 좋을지 먼저 계획을 세우고,
 // 변경사항을 다시 한번 되새긴다.
+
+// 버그1. 새로고침 후 metadata가 load되기 전에 재생시키면
+// 비디오 길이 정보가 보이지 않는다.
